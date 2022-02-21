@@ -1,57 +1,60 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import React from "react";
+import { Container, Button } from "./components/styledComps";
+import Table from "./components/table";
+import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { selectEmployees } from "./employee/employeeSlice";
+
+const employeeTableColumns = [
+  {
+    title: "Name",
+    dataIndex: "name",
+    key: "name",
+  },
+  {
+    title: "Designation",
+    dataIndex: "designation",
+    key: "designation",
+  },
+
+  {
+    title: "E Mail",
+    dataIndex: "email",
+    key: "email",
+  },
+
+  {
+    title: "Actions",
+    dataIndex: "actions",
+    key: "actions",
+    render: (empObj) => {
+      return (
+        <td>
+          <Link to={`/employee/${empObj.employeeId}/edit`}>
+            <Button bgColor="#06b6d4">Edit</Button>
+          </Link>
+          <Link to={`/employee/${empObj.employeeId}/view`}>
+            <Button bgColor="#06b6d4">View Details</Button>
+          </Link>
+        </td>
+      );
+    },
+  },
+];
 
 function App() {
+  const employees = useSelector(selectEmployees);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+    <Container>
+      <Link to={`/employee/new`}>
+        <Button style={{ marginBottom: 16 }} bgColor="#164e63">
+          Add New Employee
+        </Button>
+      </Link>
+
+      <Table columns={employeeTableColumns} dataSource={employees} />
+    </Container>
   );
 }
 
